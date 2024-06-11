@@ -6,7 +6,7 @@
     "mongoose": "^8.4.1"
   },
   "scripts": {
-    "run": "node Backend/Server.js"
+    "start": "node Backend/Server.js"
   }
   
 }
