@@ -1,19 +1,23 @@
 const express = require('express');
 const multer = require('multer');
-const cloudinary = require('cloudinary').v2;
+const admin = require('firebase-admin');
 const { MongoClient } = require('mongodb');
 const auth = require('../middleware/auth');
 const { check, validationResult } = require('express-validator');
 const logger = require('../utils/logger');
 
-cloudinary.config({
-  cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
-  api_key: process.env.CLOUDINARY_API_KEY,
-  api_secret: process.env.CLOUDINARY_API_SECRET,
+// Initialize Firebase
+var serviceAccount = require("../path/to/your/serviceAccountKey.json");
+
+admin.initializeApp({
+  credential: admin.credential.cert(serviceAccount),
+  storageBucket: "pdf-mern.appspot.com"
 });
 
+const bucket = admin.storage().bucket();
+
 const upload = multer({
-  dest: 'uploads/',
+  storage: multer.memoryStorage(),
   fileFilter: (req, file, cb) => {
     if (file.mimetype !== 'application/pdf') {
       return cb(new Error('Only PDFs are allowed'));
@@ -24,49 +28,36 @@ const upload = multer({
 
 const router = express.Router();
 
-router.post('/upload', auth, upload.single('pdf'), async (req, res) => {
+router.post('/', auth, upload.single('pdf'), async (req, res) => {
   try {
-    const result = await cloudinary.uploader.upload(req.file.path, {
-      resource_type: 'raw',
+    // Upload the PDF to Firebase Storage
+    const blob = bucket.file(req.file.originalname);
+    const blobStream = blob.createWriteStream({
+      metadata: {
+        contentType: req.file.mimetype,
+      },
     });
 
-    const client = new MongoClient(process.env.MONGODB_URL);
-    await client.connect();
-    const db = client.db('test');
-    const collection = db.collection('pdfs');
-    await collection.insertOne({
-      filename: req.file.originalname,
-      url: result.url,
-      uploadedAt: new Date(),
-      userId: req.user.id,
+    blobStream.on('error', (err) => {
+      throw new Error('Something is wrong! Unable to upload at the moment.');
     });
 
-    res.json({ msg: 'File uploaded successfully' });
-  } catch (err) {
-    logger.error(err.message, { metadata: err });
-    res.status(500).json({ error: 'Server error' });
-  }
-});
+    blobStream.on('finish', async () => {
+      // The public URL can be used to directly access the file via HTTP.
+      const publicUrl = `https://storage.googleapis.com/${bucket.name}/${blob.name}`;
 
-router.get('/user/:userId/pdfs', auth, [
-  check('userId', 'Invalid user ID').isMongoId()
-], async (req, res) => {
-  const errors = validationResult(req);
-  if (!errors.isEmpty()) {
-    return res.status(400).json({ errors: errors.array() });
-  }
+      // Save the metadata to MongoDB
+      const client = new MongoClient(process.env.MONGODB_URI, { useNewUrlParser: true, useUnifiedTopology: true });
+      await client.connect();
+      const collection = client.db("test").collection("PDF");
+      await collection.insertOne({ filename: req.file.originalname, url: publicUrl });
 
-  try {
-    const client = new MongoClient(process.env.MONGODB_URL);
-    await client.connect();
-    const db = client.db('test');
-    const collection = db.collection('pdfs');
-    const pdfs = await collection.find({ userId: req.params.userId }).toArray();
+      res.status(200).send({ filename: req.file.originalname, url: publicUrl });
+    });
 
-    res.json(pdfs);
-  } catch (err) {
-    logger.error(err.message, { metadata: err });
-    res.status(500).json({ error: 'Server error' });
+    blobStream.end(req.file.buffer);
+  } catch (error) {
+    res.status(400).send(error);
   }
 });
 
