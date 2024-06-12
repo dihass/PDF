@@ -2,17 +2,16 @@ const express = require('express');
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const { check, validationResult } = require('express-validator');
-const User = require('./userModel');
-const auth = require('./auth');
+const User = require('../models/userModel');
+const auth = require('../middleware/auth');
+const logger = require('../utils/logger');
 
 const router = express.Router();
 
-
-
 router.post('/signup', [
-  check('username', 'Username is required').notEmpty(),
-  check('email', 'Please include a valid email').isEmail(),
-  check('password', 'Please enter a password with 6 or more characters').isLength({ min: 6 }),
+  check('username', 'Username is required').notEmpty().trim().escape(),
+  check('email', 'Please include a valid email').isEmail().normalizeEmail(),
+  check('password', 'Please enter a password with 6 or more characters').isLength({ min: 6 }).trim().escape(),
 ], async (req, res) => {
   const errors = validationResult(req);
   if (!errors.isEmpty()) {
@@ -47,14 +46,14 @@ router.post('/signup', [
       res.json({ token });
     });
   } catch (err) {
-    console.error(err.message);
-    res.status(500).send('Server error');
+    logger.error(err.message, { metadata: err });
+    res.status(500).json({ error: 'Server error' });
   }
 });
 
 router.post('/login', [
-  check('email', 'Please include a valid email').isEmail(),
-  check('password', 'Password is required').exists(),
+  check('email', 'Please include a valid email').isEmail().normalizeEmail(),
+  check('password', 'Password is required').exists().trim().escape(),
 ], async (req, res) => {
   const errors = validationResult(req);
   if (!errors.isEmpty()) {
@@ -87,8 +86,8 @@ router.post('/login', [
       res.json({ token });
     });
   } catch (err) {
-    console.error(err.message);
-    res.status(500).send('Server error');
+    logger.error(err.message, { metadata: err });
+    res.status(500).json({ error: 'Server error' });
   }
 });
 
@@ -96,10 +95,8 @@ router.post('/logout', (req, res) => {
   res.json({ msg: 'User logged out' });
 });
 
-// Protected route example
 router.get('/protected', auth, (req, res) => {
-    res.json({ msg: 'This is a protected route' });
+  res.json({ msg: 'This is a protected route' });
 });
-  
 
 module.exports = router;
