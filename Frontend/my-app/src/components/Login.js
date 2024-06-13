@@ -16,14 +16,14 @@ const Login = () => {
       setMessage('Login successful!');
       navigate('/home');
     } catch (error) {
-        if (error.response && error.response.data) {
-          setMessage(error.response.data.msg || 'Login failed. Try again.');
-        } else {
-          setMessage('Login failed. Try again.');
-        }
-        console.error('Login error:', error.response ? error.response.data : error.message);
+      if (error.response && error.response.data) {
+        setMessage(error.response.data.msg || 'Login failed. Try again.');
+      } else {
+        setMessage('Login failed. Try again.');
       }
-    };
+      console.error('Login error:', error.response ? error.response.data : error.message);
+    }
+  };
 
   return (
     <div>

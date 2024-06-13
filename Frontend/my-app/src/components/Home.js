@@ -31,17 +31,31 @@ const Home = ({ history }) => {
   const onSubmit = async (e) => {
     e.preventDefault();
     const formData = new FormData();
-    formData.append('pdf', file);
-
+    formData.append('PDF', file);
+  
     try {
-      await axios.post('/api/pdfs/upload', formData);
-      fetchPdfs();
+      const token = localStorage.getItem('token');
+      if (!token) {
+        setError('No token found');
+        console.log("No token found");
+        return;
+      }
+  
+      const response = await axios.post('/api/pdfs/upload', formData, {
+        headers: {
+            'Content-Type': 'multipart/form-data',
+            'Authorization': `Bearer ${token}` // Include the token in the Authorization header
+        }
+      });
+      console.log(response.data); // Log successful response if needed
+      fetchPdfs(); // Refresh PDF list after successful upload
     } catch (err) {
       setError('Failed to upload PDF');
       console.error(err);
     }
   };
-
+  
+  
   return (
     <div>
       <h1>Home</h1>
