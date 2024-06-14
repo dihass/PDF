@@ -1,35 +1,35 @@
-import { useState } from "react";
-import { Document, Page } from "react-pdf";
+import React, { useState } from 'react';
+import { Document, Page } from 'react-pdf';
 
+const PdfComp = ({ pdfFile }) => {
+  const [numPages, setNumPages] = useState(null);
 
-function PdfComp(props) {
-  const [numPages, setNumPages] = useState();
-  const [pageNumber, setPageNumber] = useState(1);
-
-  function onDocumentLoadSuccess({ numPages }) {
+  const onDocumentLoadSuccess = ({ numPages }) => {
     setNumPages(numPages);
-  }
+  };
 
   return (
     <div className="pdf-div">
-           <p>
-        Page {pageNumber} of {numPages}
-      </p>
-      <Document file={props.pdfFile} onLoadSuccess={onDocumentLoadSuccess}>
-        {Array.apply(null, Array(numPages))
-          .map((x, i) => i + 1)
-          .map((page) => {
-            return (
-              <Page
-                pageNumber={page}
-                renderTextLayer={false}
-                renderAnnotationLayer={false}
-              />
-            );
-          })}
+      {numPages && (
+        <p>
+          Page 1 of {numPages}
+        </p>
+      )}
+      <Document
+        file={pdfFile}
+        onLoadSuccess={onDocumentLoadSuccess}
+      >
+        {Array.from(new Array(numPages), (el, index) => (
+          <Page
+            key={`page_${index + 1}`}
+            pageNumber={index + 1}
+            renderTextLayer={false}
+            renderAnnotationLayer={false}
+          />
+        ))}
       </Document>
-   
     </div>
   );
-}
+};
+
 export default PdfComp;

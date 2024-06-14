@@ -91,6 +91,10 @@ router.post('/signup', [
       res.status(500).send('Server error');
     }
   });
-  
+  // Logout route
+router.post('/logout', auth, (req, res) => {
+  // Invalidate the token on the client side
+  res.status(200).send({ msg: 'Logout successful' });
+});
 
 module.exports = router;

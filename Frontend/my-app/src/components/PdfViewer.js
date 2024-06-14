@@ -1,40 +1,27 @@
-import React, { useEffect, useState } from 'react';
-import axios from '../utils/axiosInstance';
-import { Viewer } from '@react-pdf-viewer/core';
-import { defaultLayoutPlugin } from '@react-pdf-viewer/default-layout';
-import '@react-pdf-viewer/core/lib/styles/index.css';
-import '@react-pdf-viewer/default-layout/lib/styles/index.css';
-import { useParams } from 'react-router-dom';
+import React from 'react';
+import { Document, Page } from 'react-pdf';
+import { useLocation } from 'react-router-dom';
+import 'react-pdf/dist/esm/Page/AnnotationLayer.css';
 
 const PdfViewer = () => {
-  const { id } = useParams();
-  const [pdfUrl, setPdfUrl] = useState(null);
+  const location = useLocation();
+  const { url } = location.state || {}; // Destructure `url` from `location.state` with a fallback to an empty object
 
-  const defaultLayoutPluginInstance = defaultLayoutPlugin();
+  if (!url) {
+    return <div>Error: No PDF URL provided</div>;
+  }
 
-  useEffect(() => {
-    const fetchPdf = async () => {
-      try {
-        const res = await axios.get(`/api/pdfs/${id}`);
-        setPdfUrl(res.data.url);
-      } catch (err) {
-        console.error(err);
-      }
-    };
-
-    fetchPdf();
-  }, [id]);
+  const pdfUrl = url.endsWith('.pdf') ? url : `${url}.pdf`; // Ensure the URL ends with .pdf
 
   return (
     <div>
-      <h1>PDF Viewer</h1>
-      {pdfUrl ? (
-        <div style={{ height: '750px' }}>
-          <Viewer fileUrl={pdfUrl} plugins={[defaultLayoutPluginInstance]} />
-        </div>
-      ) : (
-        <p>Loading...</p>
-      )}
+      <Document
+        file={pdfUrl}
+        onLoadSuccess={({ numPages }) => console.log(`Loaded a file with ${numPages} pages.`)}
+        onLoadError={(error) => console.error('Error while loading document:', error)}
+      >
+        <Page pageNumber={1} />
+      </Document>
     </div>
   );
 };

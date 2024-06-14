@@ -40,3 +40,25 @@
 {"level":"error","message":"Cannot read properties of undefined (reading 'startsWith')","metadata":{},"service":"user-service","timestamp":"2024-06-13 14:40:51"}
 {"level":"error","message":"Cannot read properties of undefined (reading 'startsWith')","metadata":{},"service":"user-service","timestamp":"2024-06-13 14:46:05"}
 {"level":"error","message":"Cannot read properties of undefined (reading 'startsWith')","metadata":{},"service":"user-service","timestamp":"2024-06-13 14:46:06"}
+{"level":"error","message":"ObjectId is not defined","metadata":{},"service":"user-service","timestamp":"2024-06-14 02:02:50"}
+{"level":"error","message":"ObjectId is not defined","metadata":{},"service":"user-service","timestamp":"2024-06-14 02:02:51"}
+{"level":"error","message":"ObjectId is not defined","metadata":{},"service":"user-service","timestamp":"2024-06-14 02:16:44"}
+{"level":"error","message":"ObjectId is not defined","metadata":{},"service":"user-service","timestamp":"2024-06-14 02:16:45"}
+{"level":"error","message":"input must be a 24 character hex string, 12 byte Uint8Array, or an integer","metadata":{},"service":"user-service","timestamp":"2024-06-14 03:33:17"}
+{"level":"error","message":"input must be a 24 character hex string, 12 byte Uint8Array, or an integer","metadata":{},"service":"user-service","timestamp":"2024-06-14 03:33:18"}
+{"level":"error","message":"input must be a 24 character hex string, 12 byte Uint8Array, or an integer","metadata":{},"service":"user-service","timestamp":"2024-06-14 03:34:06"}
+{"level":"error","message":"input must be a 24 character hex string, 12 byte Uint8Array, or an integer","metadata":{},"service":"user-service","timestamp":"2024-06-14 03:34:07"}
+{"level":"error","message":"Token is not valid","metadata":{"expiredAt":"2024-06-13T22:44:01.000Z","message":"jwt expired","name":"TokenExpiredError"},"service":"user-service","timestamp":"2024-06-14 04:15:47"}
+{"level":"error","message":"Token is not valid","metadata":{"expiredAt":"2024-06-13T22:44:01.000Z","message":"jwt expired","name":"TokenExpiredError"},"service":"user-service","timestamp":"2024-06-14 04:15:47"}
+{"level":"error","message":"Token is not valid","metadata":{"expiredAt":"2024-06-13T22:44:01.000Z","message":"jwt expired","name":"TokenExpiredError"},"service":"user-service","timestamp":"2024-06-14 04:15:57"}
+{"level":"error","message":"Token is not valid","metadata":{"expiredAt":"2024-06-13T22:44:01.000Z","message":"jwt expired","name":"TokenExpiredError"},"service":"user-service","timestamp":"2024-06-14 04:16:20"}
+{"level":"error","message":"Token is not valid","metadata":{"expiredAt":"2024-06-13T22:44:01.000Z","message":"jwt expired","name":"TokenExpiredError"},"service":"user-service","timestamp":"2024-06-14 04:16:26"}
+{"level":"error","message":"Token is not valid","metadata":{"expiredAt":"2024-06-13T22:44:01.000Z","message":"jwt expired","name":"TokenExpiredError"},"service":"user-service","timestamp":"2024-06-14 04:16:30"}
+{"level":"error","message":"Token is not valid","metadata":{"expiredAt":"2024-06-13T22:44:01.000Z","message":"jwt expired","name":"TokenExpiredError"},"service":"user-service","timestamp":"2024-06-14 04:16:48"}
+{"level":"error","message":"Token is not valid","metadata":{"expiredAt":"2024-06-13T22:44:01.000Z","message":"jwt expired","name":"TokenExpiredError"},"service":"user-service","timestamp":"2024-06-14 04:16:48"}
+{"level":"error","message":"Token is not valid","metadata":{"expiredAt":"2024-06-13T22:44:01.000Z","message":"jwt expired","name":"TokenExpiredError"},"service":"user-service","timestamp":"2024-06-14 04:16:51"}
+{"level":"error","message":"Token is not valid","metadata":{"expiredAt":"2024-06-13T22:44:01.000Z","message":"jwt expired","name":"TokenExpiredError"},"service":"user-service","timestamp":"2024-06-14 04:16:51"}
+{"level":"error","message":"Token is not valid","metadata":{"expiredAt":"2024-06-13T22:44:01.000Z","message":"jwt expired","name":"TokenExpiredError"},"service":"user-service","timestamp":"2024-06-14 04:16:52"}
+{"level":"error","message":"Token is not valid","metadata":{"expiredAt":"2024-06-13T22:44:01.000Z","message":"jwt expired","name":"TokenExpiredError"},"service":"user-service","timestamp":"2024-06-14 04:16:52"}
+{"level":"error","message":"connect ETIMEDOUT 3.7.243.165:27017","metadata":{"connectionGeneration":0},"service":"user-service","timestamp":"2024-06-14 05:44:50"}
+{"level":"error","message":"connect ETIMEDOUT 3.7.243.165:27017","metadata":{"connectionGeneration":0},"service":"user-service","timestamp":"2024-06-14 05:45:23"}

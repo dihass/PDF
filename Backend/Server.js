@@ -3,6 +3,7 @@ const express = require('express');
 const mongoose = require('mongoose');
 const cors = require('cors');
 const dotenv = require('dotenv');
+const path = require('path'); // Import the path module
 const userRoutes = require('./routes/userRoutes');
 const pdfRoutes = require('./routes/pdfRoutes');
 const errorHandler = require('./middleware/errorHandler');
@@ -21,9 +22,14 @@ app.use(express.json());
 // Enable CORS for all origins
 app.use(cors());
 
+// Serve static files from the 'uploads' directory
+app.use('/uploads', express.static(path.join(__dirname, '../uploads')));
+
 // Routes
 app.use('/api/users', userRoutes);
 app.use('/api/pdfs', pdfRoutes);
+
+
 
 // Error handler middleware
 app.use(errorHandler);
